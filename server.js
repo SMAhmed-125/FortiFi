@@ -16,7 +16,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 const dbURI = process.env.DB_URI;
 
 // Middleware
