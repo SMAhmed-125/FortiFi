@@ -17,7 +17,7 @@ transactionRouter.get('/:id', async (req, res) => {
         const transaction = await Transaction.findById(req.params.id);
 
         if(!transaction) {
-            res.status(404).json({ message: "No transactions exist for user"});
+            return res.status(404).json({ message: "No transactions exist for user"});
         }
 
         res.json(transaction);
@@ -60,7 +60,7 @@ transactionRouter.get('/summary', async (req, res) => {
         const summary = await Transaction.aggregate([
             { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } }
         ]);
-        res.json(summary);
+        res.json(summary.length ? summary : [{ _id: "none", totalAmount: 0 }]);
     } catch (error) {
         res.status(500).json({ message: "Error calculating transaction summary" });
     }

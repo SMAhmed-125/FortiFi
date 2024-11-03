@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import BudgetList from './pages/BudgetList';
+import GoalList from './pages/GoalList';
+import TransactionList from './pages/TransactionList';
+import CreateBudget from './pages/CreateBudget';
+import CreateGoal from './pages/CreateGoal';
+import CreateTransaction from './pages/CreateTransaction';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/budgets" component={BudgetList} />
+        <Route path="/goals" component={GoalList} />
+        <Route path="/transactions" component={TransactionList} />
+        <Route path="/budgets/new" component={CreateBudget} />
+        <Route path="/goals/new" component={CreateGoal} />
+        <Route path="/transactions/new" component={CreateTransaction} />
+      </Switch>
+      <Footer />
+    </Router>
   );
 }
 

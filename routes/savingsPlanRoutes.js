@@ -49,9 +49,11 @@ savingsPlanRouter.patch('/:id', async (req, res) => {
         const savingsPlan = await SavingsPlan.findById(req.params.id);
 
         if (!savingsPlan) {
-            res.status(404).json({ message: `No savingsPlan with ID ${req.params.id} exists for user` });
+            return res.status(404).json({ message: `No savingsPlan with ID ${req.params.id} exists for user` });
         }
-        Object.keys(req.body).forEach(field => savingsPlan.field = req.body.field);
+        Object.keys(req.body).forEach((field) => {
+            if (field in savingsPlan) savingsPlan[field] = req.body[field];
+        });
         const updatedSavingsPlan = await savingsPlan.save();
         res.json(updatedSavingsPlan);
     } catch (error) {

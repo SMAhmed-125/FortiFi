@@ -44,7 +44,9 @@ budgetRouter.patch('/:id', async (req, res) => {
         const budget = await Budget.findById(req.params.id);
         if (!budget) return res.status(404).json({ message: 'Budget not found' });
 
-        Object.keys(req.body).forEach(field => budget[field] = req.body[field]);
+        Object.keys(req.body).forEach((field) => {
+            if (field in budget) budget[field] = req.body[field];
+        });
         const updatedBudget = await budget.save();
         res.status(200).json(updatedBudget);
     } catch (error) {

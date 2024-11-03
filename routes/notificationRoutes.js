@@ -18,7 +18,7 @@ notificationRouter.get('/:id', async (req, res) => {
         const notification = await Notification.findById(req.params.id);
 
         if(!notification) {
-            res.status(404).json({ message: `No notification with ID ${req.params.id} exists for user` });
+            return res.status(404).json({ message: `No notification with ID ${req.params.id} exists for user` });
         }
 
         res.json(notification);
@@ -50,10 +50,12 @@ notificationRouter.patch('/:id', async (req, res) => {
         const notification = await Notification.findById(req.params.id);
 
         if (!notification) {
-            res.status(404).json({ message: `No notification with ID ${req.params.id} exists for user` });
+            return res.status(404).json({ message: `No notification with ID ${req.params.id} exists for user` });
         }
 
-        Object.keys(req.body).forEach(field => notification[field] = req.body[field]);
+        Object.keys(req.body).forEach((field) => {
+            if (field in notification) notification[field] = req.body[field];
+        });
         const updatedNotification = await notification.save();
         res.json(updatedNotification);
     } catch (error) {

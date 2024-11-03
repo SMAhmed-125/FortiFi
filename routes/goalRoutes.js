@@ -16,7 +16,7 @@ goalRouter.get('/:id', async (req, res) => {
         const userGoals = await Goal.findById(req.params.id);
 
         if(!userGoals) {
-            res.status(404).json({ message: "No goals exist for user"});
+            return res.status(404).json({ message: "No goals exist for user"});
         }
 
         res.json(userGoals);
@@ -61,9 +61,12 @@ goalRouter.patch('/:id', async (req, res) => {
         const goal = await Goal.findById(req.params.id);
 
         if (!goal) {
-            res.status(404).json({ message: "Could not find goal."});
+            return res.status(404).json({ message: "Could not find goal."});
         }
-        Object.keys(req.body).forEach(field => goal[field] = req.body[field]);
+
+        Object.keys(req.body).forEach((field) => {
+            if (field in goal) goal[field] = req.body[field];
+        });
         const updatedGoal = await goal.save();
         res.json(updatedGoal);
     } catch (error) {
@@ -74,7 +77,7 @@ goalRouter.patch('/:id', async (req, res) => {
 goalRouter.delete('/:id', async (req, res) => {
     try {
         const goal = await Goal.findByIdAndDelete(req.params.id);
-        res.status(204).send();
+        res.status(200).send();
     } catch (error) {
         res.status(500).json({ message: "Error deleting goal" });
     }

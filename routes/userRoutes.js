@@ -4,8 +4,9 @@ const userRouter = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Get all users
 userRouter.get('/', async (req, res) => {
-    // Get all users
+
     try {
         const users = await User.find();
         res.json(users);
@@ -14,6 +15,7 @@ userRouter.get('/', async (req, res) => {
     }
 });
 
+// Get user by Id
 userRouter.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -26,21 +28,7 @@ userRouter.get('/:id', async (req, res) => {
     }
 });
 
-userRouter.post('/', async (req, res) => {
-    const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        passwordHash: req.body.passwordHash,
-    });
-
-    try{
-        const newUser = await user.save();
-        res.status(201).json(newUser);
-    } catch (error) {
-        res.status(400).json({ message: "error in saving new user" });
-    }
-});
-
+// Update a user
 userRouter.patch('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -57,6 +45,7 @@ userRouter.patch('/:id', async (req, res) => {
     }
 });
 
+// Delete a user
 userRouter.delete('/:id', async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
@@ -66,7 +55,7 @@ userRouter.delete('/:id', async (req, res) => {
     }
 });
 
-// User registration with password hashing
+// Create a user with hashed password
 userRouter.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -81,7 +70,7 @@ userRouter.post('/register', async (req, res) => {
     }
 });
 
-// User login and JWT generation
+// Let an existing user login
 userRouter.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });

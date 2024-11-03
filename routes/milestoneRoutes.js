@@ -17,7 +17,7 @@ milestoneRouter.get('/:id', async (req, res) => {
         const milestone = await Milestone.findById(req.params.id);
 
         if(!milestone) {
-            res.status(404).json({ message: `No milestone with ID ${req.params.id} exists for user` });
+            return res.status(404).json({ message: `No milestone with ID ${req.params.id} exists for user` });
         }
 
         res.json(milestone);
@@ -48,9 +48,11 @@ milestoneRouter.patch('/:id', async (req, res) => {
         const milestone = await Milestone.findById(req.params.id);
 
         if (!milestone) {
-            res.status(404).json({ message: `No milestone with ID ${req.params.id} exists for user` });
+            return res.status(404).json({ message: `No milestone with ID ${req.params.id} exists for user` });
         }
-        Object.keys(req.body).forEach(field => milestone[field] = req.body[field]);
+        Object.keys(req.body).forEach((field) => {
+            if (field in milestone) milestone[field] = req.body[field];
+        });
         const updatedMilestone = await milestone.save();
         res.json(updatedMilestone);
     } catch (error) {
