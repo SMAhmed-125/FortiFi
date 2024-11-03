@@ -7,21 +7,21 @@ const notificationSchema = mongoose.Schema({
         ref: 'user',
     },
     goalId: {
-        typeof: mongoose.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         required: true,
         ref: 'goal',
     },
     notificationType: {
-        typeof: String,
+        type: String,
         enum: ["in-app", "text", "call", "email"],
         required: true,
     },
     dateScheduled: {
-        typeof: Date,
+        type: Date,
         required: true,
     },
     message: {
-        typeof: String,
+        type: String,
     },
 })
 

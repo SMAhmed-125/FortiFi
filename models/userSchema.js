@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const Goal = require('/goalSchema.js');
-const Transaction = require('/transactionSchema.js');
-const Budget = require('/budgetSchema.js');
-const Notification = require('/notificationSchema.js');
+const Goal = require('./goalSchema');
+const Transaction = require('./transactionSchema');
+const Budget = require('./budgetSchema');
+const Notification = require('./notificationSchema');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -44,7 +44,7 @@ userSchema.pre('remove', async function(next) {
     await Notification.deleteMany({ userId });
     await Budget.deleteMany({ userId });
     
-    next(); // proceed to remove the user after cascading deletes
+    next(); 
 });
 
 userSchema.pre('save', async function(next) {
