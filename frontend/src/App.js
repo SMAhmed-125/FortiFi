@@ -1,27 +1,28 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import BudgetList from './pages/BudgetList';
-import GoalList from './pages/GoalList';
-import TransactionList from './pages/TransactionList';
-import CreateBudget from './pages/CreateBudget';
-import CreateGoal from './pages/CreateGoal';
-import CreateTransaction from './pages/CreateTransaction';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Budget from './pages/Budget';
+import Goals from './pages/Goals';
+import Transactions from './pages/Transactions';
+import SavingsPlan from './pages/SavingsPlan';
+import Notifications from './pages/Notifications';
+import Profile from './pages/Profile';
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/budgets" component={BudgetList} />
-        <Route path="/goals" component={GoalList} />
-        <Route path="/transactions" component={TransactionList} />
-        <Route path="/budgets/new" component={CreateBudget} />
-        <Route path="/goals/new" component={CreateGoal} />
-        <Route path="/transactions/new" component={CreateTransaction} />
-      </Switch>
-      <Footer />
+      <Routes>
+        <Route exact path="/" component={Dashboard} />
+        <Route path="/budget" component={Budget} />
+        <Route path="/goals" component={Goals} />
+        <Route path="/transactions" component={Transactions} />
+        <Route path="/savings" component={SavingsPlan} />
+        <Route path="/notifications" component={Notifications} />
+        <Route path="/profile" component={Profile} />
+      </Routes>
     </Router>
   );
 }
 
 export default App;
+
