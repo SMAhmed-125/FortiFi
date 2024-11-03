@@ -1,14 +1,13 @@
-// src/components/charts/SavingsTrackerChart.js
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
 const SavingsTrackerChart = ({ data }) => {
     const chartData = {
-        labels: data.labels, // e.g., ['January', 'February', 'March']
+        labels: data.labels,
         datasets: [
             {
                 label: 'Savings Growth',
-                data: data.values, // e.g., [200, 500, 1000]
+                data: data.values, 
                 fill: true,
                 borderColor: '#4BC0C0',
                 backgroundColor: 'rgba(75,192,192,0.2)',

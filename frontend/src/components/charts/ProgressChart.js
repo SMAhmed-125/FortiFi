@@ -8,7 +8,7 @@ const ProgressChart = ({ data }) => {
         datasets: [
             {
                 label: 'Savings Progress',
-                data: [data.achieved, data.remaining], // e.g., [400, 100] if the goal is 500
+                data: [data.achieved, data.remaining], 
                 backgroundColor: ['#36A2EB', '#FF6384'],
                 hoverBackgroundColor: ['#36A2EB', '#FF6384'],
             },
