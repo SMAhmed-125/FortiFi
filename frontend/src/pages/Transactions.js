@@ -10,7 +10,7 @@ function Transactions() {
     useEffect(() => {
         async function fetchTransactions() {
             try {
-                const response = await getTransactionByUserId(userId);
+                const response = await getTransactionById(userId);
                 setTransactionHistory(response.data);
             } catch (error) {
                 console.error("Error fetching transaction history:", error);

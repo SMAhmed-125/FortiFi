@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import SpendingChart from '../components/charts/SpendingChart';
 import BudgetChart from '../components/charts/BudgetChart';
 import GoalChart from '../components/charts/GoalChart';
-import { getSpendingData, getBudgetSummary, getGoalProgress } from '../services/api';
+import { getTransactionById } from '../services/transactionApi';
+import { getBudgetById } from '../services/budgetApi';
+import { getGoalById } from '../services/goalApi';
 
 const Dashboard = () => {
     const [spendingData, setSpendingData] = useState(null);
     const [budgetData, setBudgetData] = useState(null);
     const [goalData, setGoalData] = useState(null);
-
+    const userId = '67278ae93ac9109a110d8190'; 
     useEffect(() => {
         async function fetchData() {
-            const spending = await getSpendingData();
-            const budget = await getBudgetSummary();
-            const goals = await getGoalProgress();
+            const spending = await getTransactionById(userId);
+            const budget = await getBudgetById(userId);
+            const goals = await getGoalById(userId);
 
             setSpendingData(spending);
             setBudgetData(budget);
