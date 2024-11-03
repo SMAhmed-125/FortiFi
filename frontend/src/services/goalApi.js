@@ -12,22 +12,22 @@ export const getAllGoals = async () => {
     }
 };
 
-export const getGoalById = async (id) => {
+export const getGoalById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/goals/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/goals/${userId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching goal with id ${id}:`, error);
+        console.error(`Error fetching goal with id ${userId}:`, error);
         throw error;
     }
 };
 
-export const getProgressOfGoalById = async (id) => {
+export const getProgressOfGoalById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/goals/${id}/progress`);
+        const response = await axios.get(`${API_BASE_URL}/goals/${userId}/progress`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching goal progress with id ${id}:`, error);
+        console.error(`Error fetching goal progress with id ${userId}:`, error);
         throw error;
     }
 };
@@ -42,22 +42,22 @@ export const createGoal = async (goalData) => {
     }
 };
 
-export const updateGoal = async (id, goalData) => {
+export const updateGoal = async (userId, goalData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/goals/${id}`, goalData);
+        const response = await axios.patch(`${API_BASE_URL}/goals/${userId}`, goalData);
         return response.data;
     } catch (error) {
-        console.error(`Error updating goal with ${id}:`, error);
+        console.error(`Error updating goal with ${userId}:`, error);
         throw error;
     }
 }
 
-export const deleteGoal = async (id) => {
+export const deleteGoal = async (userId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/goals/${id}`);
+        const response = await axios.delete(`${API_BASE_URL}/goals/${userId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting goal with id ${id}:`, error);
+        console.error(`Error deleting goal with id ${userId}:`, error);
         throw error;
     }
 };

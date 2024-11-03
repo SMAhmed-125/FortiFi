@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const Transaction = require('../models/transactionSchema.js');
 const express = require('express');
 const transactionRouter = express.Router();
@@ -26,6 +27,49 @@ transactionRouter.get('/:id', async (req, res) => {
     }
 });
 
+transactionRouter.get('/:userId/:goalId/summary', async (req, res) => {
+    try {
+        const summary = await Transaction.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(req.params.userId) }, goalId: mongoose.Types.ObjectId(req.params.goalId) },
+            { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } },
+            { $group: { _id: "$date", totalAmount: { $sum: "$amount" }  } },
+        ]);
+        res.json(summary.length ? summary : [{ _id: "none", totalAmount: 0 }]);
+    } catch (error) {
+        res.status(500).json({ message: "Error calculating transaction summary" });
+    }
+});
+
+transactionRouter.get('/:userId/summary', async (req, res) => {
+    try {
+        const summary = await Transaction.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
+            { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } },
+            { $group: { _id: "$date", totalAmount: { $sum: "$amount" }  } },
+        ]);
+        res.json(summary.length ? summary : [{ _id: "none", totalAmount: 0 }]);
+    } catch (error) {
+        res.status(500).json({ message: "Error calculating transaction summary" });
+    }
+});
+
+transactionRouter.get('/:userId/:goalId', async (req, res) => {
+    try {
+        const transaction = await Transaction.findOne({
+            userId: req.params.userId,
+            goalId: req.params.goalId
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: `No transaction found for user ID ${req.params.userId} and goal ID ${req.params.goalId}` });
+        }
+
+        res.status(200).json(transaction);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving transaction by userId and goalId" });
+    }
+});
+
 transactionRouter.post('/', async (req, res) => {
 
     const transaction = new Transaction({
@@ -46,25 +90,17 @@ transactionRouter.post('/', async (req, res) => {
     }
 });
 
-transactionRouter.delete('/:id', async (req, res) => {
+transactionRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
-        const transaction = await Transaction.findByIdAndDelete(req.params.id);
+        const transaction = await Transaction.findOneAndDelete(
+            { userId: req.params.userId},
+            { goalId: req.params.goalId}
+        );
         res.json( { message: "successfully deleted transaction" });
     } catch (error) {
         res.status(500).json({ message: "deleteTransaction failed" });
     }
 })
-
-transactionRouter.get('/summary', async (req, res) => {
-    try {
-        const summary = await Transaction.aggregate([
-            { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } }
-        ]);
-        res.json(summary.length ? summary : [{ _id: "none", totalAmount: 0 }]);
-    } catch (error) {
-        res.status(500).json({ message: "Error calculating transaction summary" });
-    }
-});
 
 
 module.exports = transactionRouter;

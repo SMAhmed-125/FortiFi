@@ -12,12 +12,12 @@ export const getAllUsers = async () => {
     }
 };
 
-export const getUserById = async (id) => {
+export const getUserById = async (userId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/users/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching user with id ${id}:`, error);
+      console.error(`Error fetching user with userId ${userId}:`, error);
       throw error;
     }
 };
@@ -32,22 +32,22 @@ export const createUser = async (userData) => {
   }
 };
 
-export const updateUser = async (id, userData) => {
+export const updateUser = async (userId, userData) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/users/${id}`, userData);
+      const response = await axios.patch(`${API_BASE_URL}/users/${userId}`, userData);
       return response.data;
     } catch (error) {
-      console.error(`Error updating user with id ${id}:`, error);
+      console.error(`Error updating user with userId ${userId}:`, error);
       throw error;
     }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/users/${id}`);
+      const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error deleting user with id ${id}:`, error);
+      console.error(`Error deleting user with userId ${userId}:`, error);
       throw error;
     }
 };

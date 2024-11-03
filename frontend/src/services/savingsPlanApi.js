@@ -12,22 +12,22 @@ export const getAllSavingsPlans = async () => {
     }
 };
 
-export const getSavingsPlanById = async (id) => {
+export const getSavingsPlanById = async (goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/savings/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/savings/${goalId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error getting savings plan with id ${id}:`, error);
+        console.error(`Error getting savings plan with goalId ${goalId}:`, error);
         throw error;
     }
 };
 
-export const getSavingsPlanProgressById = async (id) => {
+export const getSavingsPlanProgressById = async (goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/savings/${id}/progress`);
+        const response = await axios.get(`${API_BASE_URL}/savings/${goalId}/progress`);
         return response.data;
     } catch (error) {
-        console.error(`Error getting savings plan progress with id ${id}:`, error);
+        console.error(`Error getting savings plan progress with goalId ${goalId}:`, error);
         throw error;
     }
 };
@@ -42,22 +42,22 @@ export const createSavingsPlan = async (planData) => {
     }
 };
 
-export const updateSavingsPlanById = async (id, planData) => {
+export const updateSavingsPlanById = async (goalId, planData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/savings/${id}`, planData);
+        const response = await axios.patch(`${API_BASE_URL}/savings/${goalId}`, planData);
         return response.data;
     } catch (error) {
-        console.error(`Error updating savings plan with id ${id}:`, error);
+        console.error(`Error updating savings plan with goalId ${goalId}:`, error);
         throw error;
     }
 };
 
-export const deleteSavingsPlanById = async (id) => {
+export const deleteSavingsPlanById = async (goalId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/savings/${id}`);
+        const response = await axios.delete(`${API_BASE_URL}/savings/${goalId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting savings plan with id ${id}:`, error);
+        console.error(`Error deleting savings plan with goalId ${goalId}:`, error);
         throw error;
     }
 };

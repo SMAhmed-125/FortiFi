@@ -12,12 +12,22 @@ export const getAllNotifications = async () => {
     }
 };
 
-export const getNotificationById = async (id) => {
+export const getNotificationById = async (userId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/notifications/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/notifications/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching notification with id ${id}:`, error);
+      console.error(`Error fetching notification with userId ${userId}:`, error);
+      throw error;
+    }
+};
+
+export const getNotificationByUserIdAndGoalId = async (userId, goalId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/notifications/${userId}/${goalId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching notification with userId ${userId} and ${goalId}:`, error);
       throw error;
     }
 };
@@ -32,22 +42,22 @@ export const createNotification = async (notificationData) => {
     }
 };
 
-export const updateNotificationById = async (id, notificationData) => {
+export const updateNotificationById = async (userId, notificationData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/notifications/${id}`, notificationData);
+        const response = await axios.patch(`${API_BASE_URL}/notifications/${userId}`, notificationData);
         return response.data;
     } catch (error) {
-        console.error(`Error updating notification with id ${id}:`, error);
+        console.error(`Error updating notification with userId ${userId}:`, error);
         throw error;
     }
 };
 
-export const deleteNotificationById = async (id) => {
+export const deleteNotificationById = async (userId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/notifications/${id}`);
+        const response = await axios.delete(`${API_BASE_URL}/notifications/${userId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting notification with id ${id}:`, error);
+        console.error(`Error deleting notification with userId ${userId}:`, error);
         throw error;
     }
 };

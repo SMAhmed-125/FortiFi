@@ -16,29 +16,39 @@ userRouter.get('/', async (req, res) => {
 });
 
 // Get user by Id
-userRouter.get('/:id', async (req, res) => {
+userRouter.get('/:userId', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({ userId: req.params.userId });
         if (!user) {
             return res.status(404).json({ message: "cannot find user to update" });
         }
         res.json(user);
     } catch(error) {
-        res.status(400).json({ message: "error in getting user by id"});
+        res.status(400).json({ message: "error in getting user by userId"});
     }
 });
 
 // Update a user
-userRouter.patch('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
+userRouter.patch('/:userId', async (req, res) => {
+    updates = {};
 
-        if (!user) {
+    Object.keys(req.body).forEach((key) => {
+        if ('email'.includes(key)) {
+            updates[key] = req.body[key];
+        }
+    });
+
+    try {
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: req.params.userId },
+            updates,
+            { new: true, runValidators: true},
+        );
+
+        if (!updatedUser) {
             return res.status(404).json({ message: "cannot find user to update" });
         }
-        const { passwordHash, ...updates } = req.body;
-        Object.keys(updates).forEach(field => user[field] = updates[field]);
-        const updatedUser = await user.save();
+
         res.json(updatedUser);
     } catch (error) {
         res.status(400).json({ message: "error in updating existing user" });
@@ -46,9 +56,9 @@ userRouter.patch('/:id', async (req, res) => {
 });
 
 // Delete a user
-userRouter.delete('/:id', async (req, res) => {
+userRouter.delete('/:userId', async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id);
+        const user = await User.findOneAndDelete({ userId: req.params.userId });;
         res.json({ message: "deleted user successfully"});
     } catch (error) {
         res.status(400).json({ message: "error in deleting existing user" });
@@ -75,9 +85,9 @@ userRouter.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user || !await bcrypt.compare(req.body.password, user.passwordHash)) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ message: "InvaluserId credentials" });
         }
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
         res.status(500).json({ message: "Error logging in" });

@@ -12,19 +12,39 @@ export const getAllTransactions = async () => {
     }
 };
 
-export const getTransactionById = async (id) => {
+export const getTransactionById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error getting transaction with id ${id}:`, error);
+        console.error(`Error getting transaction with id ${userId}:`, error);
         throw error;
     }
 };
 
-export const getTransactionSummary = async () => {
+export const getTransactionByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/summary`);
+        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/${goalId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error getting transaction with user id ${userId} and goal id ${goalId}:`, error);
+        throw error;
+    }
+};
+
+export const getTransactionSummaryByUserId = async (userId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/summary`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error getting transaction summary:`, error);
+        throw error;
+    }
+};
+
+export const getTransactionSummaryByUserIdAndGoalId = async (userId, goalId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/${goalId}/summary`);
         return response.data;
     } catch (error) {
         console.error(`Error getting transaction summary:`, error);
@@ -42,12 +62,12 @@ export const createTransaction = async (transactionData) => {
     }
 };
 
-export const deleteTransactionById = async (id) => {
+export const deleteTransactionByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/transactions/${id}`);
+        const response = await axios.delete(`${API_BASE_URL}/transactions/${userId}/${goalId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting transaction with id ${id}:`, error);
+        console.error(`Error deleting transaction with user id ${userId} and goal id ${goalId}:`, error);
         throw error;
     }
 };

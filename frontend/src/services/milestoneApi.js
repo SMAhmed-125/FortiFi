@@ -12,12 +12,12 @@ export const getAllMilestones = async () => {
     }
 };
 
-export const getMilestoneById = async (id) => {
+export const getMilestoneById = async (goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/milestones/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/milestones/${goalId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error getting milestone with id ${id}:`, error);
+        console.error(`Error getting milestone with goalId ${goalId}:`, error);
         throw error;
     }
 };
@@ -43,32 +43,22 @@ export const createMilestone = async (milestoneData) => {
     }
 };
 
-export const updateMilestoneById = async (id, milestoneData) => {
+export const updateMilestoneById = async (goalId, milestoneData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/milestones/${id}`, milestoneData);
+        const response = await axios.patch(`${API_BASE_URL}/milestones/${goalId}`, milestoneData);
         return response.data;
     } catch (error) {
-        console.error(`Error updating milestone with id ${id}:`, error);
+        console.error(`Error updating milestone with goalId ${goalId}:`, error);
         throw error;
     }
 };
 
-export const updateMilestoneToComplete = async (id) => {
+export const deleteMilestoneById = async (goalId) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/milestones/${id}/completed`);
+        const response = await axios.delete(`${API_BASE_URL}/milestones/${goalId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error updating milestone to complete with id ${id}:`, error);
-        throw error;
-    }
-};
-
-export const deleteMilestoneById = async (id) => {
-    try {
-        const response = await axios.delete(`${API_BASE_URL}/milestones/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error deleting milestone with id ${id}:`, error);
+        console.error(`Error deleting milestone with goalId ${goalId}:`, error);
         throw error;
     }
 };

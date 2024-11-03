@@ -11,9 +11,9 @@ goalRouter.get('/', async (req, res) => {
     }
 });
 
-goalRouter.get('/:id', async (req, res) => {
+goalRouter.get('/:userId', async (req, res) => {
     try {
-        const userGoals = await Goal.findById(req.params.id);
+        const userGoals = await Goal.findOne({ userId: req.params.userId});
 
         if(!userGoals) {
             return res.status(404).json({ message: "No goals exist for user"});
@@ -25,9 +25,9 @@ goalRouter.get('/:id', async (req, res) => {
     }
 });
 
-goalRouter.get('/:id/progress', async (req, res) => {
+goalRouter.get('/:userId/progress', async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.id);
+        const goal = await Goal.findOne({ userId: req.params.userId});
         if (!goal) return res.status(404).json({ message: 'Goal not found' });
         const progress = goal.targetAmount ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
         res.json({ progress: `${progress}%` });
@@ -56,27 +56,27 @@ goalRouter.post('/', async (req, res) => {
     }
 });
 
-goalRouter.patch('/:id', async (req, res) => {
+goalRouter.patch('/:userId', async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.id);
+        const updatedGoal = await Goal.findOneAndUpdate(
+            { userId: req.params.userId },
+            req.body,
+            { new: true, runValidators: true }
+        );
 
-        if (!goal) {
-            return res.status(404).json({ message: "Could not find goal."});
+        if (!updatedGoal) {
+            return res.status(404).json({ message: "Goal not found." });
         }
 
-        Object.keys(req.body).forEach((field) => {
-            if (field in goal) goal[field] = req.body[field];
-        });
-        const updatedGoal = await goal.save();
-        res.json(updatedGoal);
+        res.status(200).json(updatedGoal);
     } catch (error) {
-        res.status(400).json({ message: "updateGoal failed"});
+        res.status(400).json({ message: "Error updating goal" });
     }
 });
 
-goalRouter.delete('/:id', async (req, res) => {
+goalRouter.delete('/:userId', async (req, res) => {
     try {
-        const goal = await Goal.findByIdAndDelete(req.params.id);
+        const goal = await Goal.findOneAndDelete({ userId: req.params.userId });
         res.status(200).send();
     } catch (error) {
         res.status(500).json({ message: "Error deleting goal" });

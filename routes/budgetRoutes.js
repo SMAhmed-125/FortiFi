@@ -12,25 +12,59 @@ budgetRouter.get('/', async (req, res) => {
     }
 });
 
-// Get a budget summary
-budgetRouter.get('/summary', async (req, res) => {
+// Get budgets for a specific user
+budgetRouter.get('/:userId', async (req, res) => {
+    try {
+        const budgets = await Budget.findOne({ userId: req.params.userId });
+        res.status(200).json(budgets);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving budgets" });
+    }
+});
+
+// Get a budget summary grouped by categories
+budgetRouter.get('/:userId/summary', async (req, res) => {
     try {
         const budgets = await Budget.aggregate([
-            { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+            { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
+            { $unwind: "$budgetCategories" }, // Breaks down each category into separate documents
+            {
+                $group: {
+                    _id: { userId: "$userId", category: "$budgetCategories" },
+                    totalIncome: { $sum: "$monthlyIncome" },
+                    totalExpenses: { $sum: "$monthlyExpenses" },
+                    incomeExpenseDifference: { $sum: { $subtract: ["$monthlyIncome", "$monthlyExpenses"] } }
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id.userId",
+                    categories: {
+                        $push: {
+                            category: "$_id.category",
+                            totalIncome: "$totalIncome",
+                            totalExpenses: "$totalExpenses",
+                            incomeExpenseDifference: "$incomeExpenseDifference"
+                        }
+                    }
+                }
+            }
         ]);
-        res.json(budgets[0] || { totalAmount: 0 });
+
+        res.json(budgets[0] || { categories: [] });
     } catch (error) {
         res.status(500).json({ message: "Error calculating summary" });
     }
 });
 
+
 // Create or replace a budget
-budgetRouter.put('/:id', async (req, res) => {
+budgetRouter.put('/:userId', async (req, res) => {
     try {
-        const updatedBudget = await Budget.findByIdAndUpdate(
-            req.params.id,
+        const updatedBudget = await Budget.findOneAndUpdate(
+            { userId: req.params.userId },
             req.body,
-            { new: true, upsert: true }
+            { new: true, runValidators: true},
         );
         res.status(200).json(updatedBudget);
     } catch (error) {
@@ -39,15 +73,16 @@ budgetRouter.put('/:id', async (req, res) => {
 });
 
 // Update budget by fields
-budgetRouter.patch('/:id', async (req, res) => {
+budgetRouter.patch('/:userId', async (req, res) => {
     try {
-        const budget = await Budget.findById(req.params.id);
-        if (!budget) return res.status(404).json({ message: 'Budget not found' });
+        const updatedBudget = await Budget.findOne(
+            { userId: req.params.userId },
+            req.body,
+            { new: true, runValidators: true},
+        );
 
-        Object.keys(req.body).forEach((field) => {
-            if (field in budget) budget[field] = req.body[field];
-        });
-        const updatedBudget = await budget.save();
+        if (!updatedBudget) return res.status(404).json({ message: 'Budget not found' });
+
         res.status(200).json(updatedBudget);
     } catch (error) {
         res.status(400).json({ message: "Error updating budget" });
@@ -55,9 +90,9 @@ budgetRouter.patch('/:id', async (req, res) => {
 });
 
 // Delete a budget by ID
-budgetRouter.delete('/:id', async (req, res) => {
+budgetRouter.delete('/:userId', async (req, res) => {
     try {
-        await Budget.findByIdAndDelete(req.params.id);
+        await Budget.findOneAndDelete({ userId: req.params.userId });
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: "Error deleting budget" });
