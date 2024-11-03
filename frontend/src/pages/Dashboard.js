@@ -24,7 +24,7 @@ const Dashboard = () => {
 
     if (!spendingData || !budgetData || !goalData) return <div>Loading...</div>;
 
-    // Define styles using JavaScript objects
+    
     const styles = {
         container: {
             padding: '20px',
