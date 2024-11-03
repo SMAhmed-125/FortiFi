@@ -1,7 +1,10 @@
 require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('./middlewares/passportConfig'); // Google OAuth middleware
+const authenticateToken = require('./middlewares/authMiddleware'); // JWT middleware
 
 // Import route files
 const budgetRoutes = require('./routes/budgetRoutes');
@@ -13,12 +16,13 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 const dbURI = process.env.DB_URI;
 
 // Middleware
 app.use(cors());
 app.use(express.json()); 
+app.use(passport.initialize());
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -35,6 +39,15 @@ app.use('/api/savings-plans', savingsPlanRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/users', userRoutes);
 
+// Google OAuth routes
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        res.redirect('/'); 
+    }
+);
+
 // Root route
 app.get('/', (req, res) => {
     res.status(200).send("Connected to server successfully!");
@@ -47,3 +60,5 @@ mongoose.connect(dbURI)
         app.listen(port, () => console.log(`Server is running on port ${port}`));
     })
     .catch((error) => console.error('Failed to connect to MongoDB', error));
+
+
