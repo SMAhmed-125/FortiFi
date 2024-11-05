@@ -2,16 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-export const getAllSavingsPlans = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/savings`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error getting savings plans:`, error);
-        throw error;
-    }
-};
-
 export const getSavingsPlanById = async (goalId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/savings/${goalId}`);
@@ -32,9 +22,9 @@ export const getSavingsPlanProgressById = async (goalId) => {
     }
 };
 
-export const createSavingsPlan = async (planData) => {
+export const createSavingsPlan = async (goalId, planData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/savings`, planData);
+        const response = await axios.post(`${API_BASE_URL}/savings/${goalId}`, planData);
         return response.data;
     } catch (error) {
         console.error(`Error creating savings plan:`, error);

@@ -4,32 +4,21 @@ const userRouter = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Get all users
-userRouter.get('/', async (req, res) => {
-
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch(error) {
-        res.status(500).json({ message : "error in getting all users"});
-    }
-});
-
 // Get user by Id
-userRouter.get('/:userId', async (req, res) => {
+userRouter.get('/users/:userId', async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.params.userId });
         if (!user) {
             return res.status(404).json({ message: "cannot find user to update" });
         }
-        res.json(user);
+        res.status(200).json(user);
     } catch(error) {
         res.status(400).json({ message: "error in getting user by userId"});
     }
 });
 
 // Update a user
-userRouter.patch('/:userId', async (req, res) => {
+userRouter.patch('/users/:userId', async (req, res) => {
     updates = {};
 
     Object.keys(req.body).forEach((key) => {
@@ -49,24 +38,24 @@ userRouter.patch('/:userId', async (req, res) => {
             return res.status(404).json({ message: "cannot find user to update" });
         }
 
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
     } catch (error) {
         res.status(400).json({ message: "error in updating existing user" });
     }
 });
 
 // Delete a user
-userRouter.delete('/:userId', async (req, res) => {
+userRouter.delete('/users/:userId', async (req, res) => {
     try {
         const user = await User.findOneAndDelete({ userId: req.params.userId });;
-        res.json({ message: "deleted user successfully"});
+        res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ message: "error in deleting existing user" });
     }
 });
 
 // Create a user with hashed password
-userRouter.post('/register', async (req, res) => {
+userRouter.post('/users/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
@@ -81,7 +70,7 @@ userRouter.post('/register', async (req, res) => {
 });
 
 // Let an existing user login
-userRouter.post('/login', async (req, res) => {
+userRouter.post('/users/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user || !await bcrypt.compare(req.body.password, user.passwordHash)) {

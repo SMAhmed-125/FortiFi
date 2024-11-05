@@ -33,9 +33,9 @@ export const getMilestoneByOrder = async () => {
 };
 
 
-export const createMilestone = async (milestoneData) => {
+export const createMilestone = async (userId, milestoneData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/milestones`, milestoneData);
+        const response = await axios.post(`${API_BASE_URL}/milestones/${goalId}`, milestoneData);
         return response.data;
     } catch (error) {
         console.error(`Error creating milestone:`, error);

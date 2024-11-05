@@ -2,18 +2,23 @@ const Goal = require('../models/goalSchema.js');
 const express = require('express');
 const goalRouter = express.Router();
 
-goalRouter.get('/', async (req, res) => {
+
+// get all progress for all goals for a user
+goalRouter.get('/goals/:userId/progress', async (req, res) => {
     try {
-        const goals = await Goal.find();
-        res.status(200).json(goals);
+        const goal = await Goal.find({ userId: req.params.userId});
+        if (!goal) return res.status(404).json({ message: 'Goal not found' });
+        const progress = goal.targetAmount ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
+        res.json({ progress: `${progress}%` });
     } catch (error) {
-        res.status(500).json({ message: "Error retrieving goals" });
+        res.status(500).json({ message: "Error calculating progress" });
     }
 });
 
-goalRouter.get('/:userId', async (req, res) => {
+// get all goals for a user
+goalRouter.get('/goals/:userId', async (req, res) => {
     try {
-        const userGoals = await Goal.findOne({ userId: req.params.userId});
+        const userGoals = await Goal.find({ userId: req.params.userId});
 
         if(!userGoals) {
             return res.status(404).json({ message: "No goals exist for user"});
@@ -25,27 +30,18 @@ goalRouter.get('/:userId', async (req, res) => {
     }
 });
 
-goalRouter.get('/:userId/progress', async (req, res) => {
-    try {
-        const goal = await Goal.findOne({ userId: req.params.userId});
-        if (!goal) return res.status(404).json({ message: 'Goal not found' });
-        const progress = goal.targetAmount ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
-        res.json({ progress: `${progress}%` });
-    } catch (error) {
-        res.status(500).json({ message: "Error calculating progress" });
-    }
-});
+goalRouter.post('/goals/:userId', async (req, res) => {
 
-goalRouter.post('/', async (req, res) => {
+    const { name, targetAmount, currentAmount, startDate, targetDate, priorityLevel } = req.body;
 
     const goal = new Goal({
-        userId: req.body.userId,
-        name: req.body.name,
-        targetAmount: req.body.targetAmount,
-        currentAmount: req.body.currentAmount,
-        startDate: req.body.startDate,
-        targetDate: req.body.targetDate,
-        priorityLevel: req.body.priorityLevel,
+        userId: req.params.userId,
+        name,
+        targetAmount,
+        currentAmount,
+        startDate,
+        targetDate,
+        priorityLevel,
     });
 
     try {
@@ -56,7 +52,7 @@ goalRouter.post('/', async (req, res) => {
     }
 });
 
-goalRouter.patch('/:userId', async (req, res) => {
+goalRouter.patch('/goals/:userId', async (req, res) => {
     try {
         const updatedGoal = await Goal.findOneAndUpdate(
             { userId: req.params.userId },
@@ -74,7 +70,7 @@ goalRouter.patch('/:userId', async (req, res) => {
     }
 });
 
-goalRouter.delete('/:userId', async (req, res) => {
+goalRouter.delete('/goals/:userId', async (req, res) => {
     try {
         const goal = await Goal.findOneAndDelete({ userId: req.params.userId });
         res.status(200).send();

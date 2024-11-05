@@ -2,18 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-// Get all budgets
-export const getAllBudgets = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/budgets`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error getting budgets:`, error);
-        throw error;
-    }
-};
 
-// Get all budgets
+// Get all budgets by User Id
 export const getBudgetById = async (userId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/budgets/${userId}`);
@@ -25,7 +15,7 @@ export const getBudgetById = async (userId) => {
 };
 
 // Get budget summary for a specific user
-export const getBudgetSummary = async (userId) => {
+export const getBudgetSummaryByUserId = async (userId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/budgets/${userId}/summary`);
         return response.data;
@@ -35,7 +25,7 @@ export const getBudgetSummary = async (userId) => {
     }
 };
 
-// Update a specific budget by ID (PATCH)
+// Update a specific budget by ID
 export const updateBudgetById = async (userId, budgetData) => {
     try {
         const response = await axios.patch(`${API_BASE_URL}/budgets/${userId}`, budgetData);
@@ -46,7 +36,7 @@ export const updateBudgetById = async (userId, budgetData) => {
     }
 };
 
-// Create or replace a budget for a specific user (PUT)
+// Create or replace a budget for a specific user 
 export const createBudget = async (userId, budgetData) => {
     try {
         const response = await axios.put(`${API_BASE_URL}/budgets/${userId}`, budgetData);

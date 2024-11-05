@@ -4,18 +4,9 @@ const notificationRouter = express.Router();
 const cron = require('node-cron');
 
 
-notificationRouter.get('/', async (req, res) => {
+notificationRouter.get('/notifications/:userId', async (req, res) => {
     try {
-        const notifications = await Notification.find();
-        res.json(notifications);
-    } catch (error) {
-        res.status(400).json({ message: "getNotifications failed"});
-    }
-});
-
-notificationRouter.get('/:userId', async (req, res) => {
-    try {
-        const notification = await Notification.findOne({ userId: req.params.userId });
+        const notification = await Notification.find({ userId: req.params.userId });
 
         if(!notification) {
             return res.status(404).json({ message: `No notification with ID ${req.params.userId} exists for user` });
@@ -27,9 +18,9 @@ notificationRouter.get('/:userId', async (req, res) => {
     }
 });
 
-notificationRouter.get('/:userId/:goalId', async (req, res) => {
+notificationRouter.get('/notifications/:userId/:goalId', async (req, res) => {
     try {
-        const notification = await Notification.findOne({
+        const notification = await Notification.find({
             userId: req.params.userId,
             goalId: req.params.goalId
         });
@@ -44,32 +35,30 @@ notificationRouter.get('/:userId/:goalId', async (req, res) => {
     }
 });
 
-notificationRouter.get('/:goalId', async (req, res) => {
-    try {
-        const notification = await Notification.findOne({ goalId: req.params.goalId });
 
-        if(!notification) {
-            return res.status(404).json({ message: `No notification with ID ${req.params.goalId} exists for user` });
-        }
-
-        res.json(notification);
-    } catch (error) {
-        res.status(400).json({ message: "getNotificationsBygoalId failed"});
-    }
-});
-
-notificationRouter.post('/', async (req, res) => {
+notificationRouter.post('/notifications/:userId/:goalId', async (req, res) => {
+    const { notificationType, dateScheduled, message } = req.body;
 
     const notification = new Notification({
-        userId: req.body.userId,
-        goalId: req.body.goalId,
-        notificationType: req.body.notificationType,
-        dateScheduled: req.body.dateScheduled,
-        message: req.body.message,
+        userId: req.params.userId,
+        goalId: req.params.goalId,
+        notificationType,
+        dateScheduled,
+        message,
     });
 
     try {
         const newNotification = await notification.save();
+
+        const date = new Date(notification.dateScheduled);
+        const cronExpression = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1} *`;
+        
+        const job = cron.schedule(cronExpression, () => {
+            console.log(`Sending notification: ${notification.message}`);
+        }, {
+            scheduled: true
+        });
+
         res.status(201).json(newNotification);
     } catch(error) {
         res.status(400).json({ message: "saveNewNotification failed" });
@@ -77,7 +66,7 @@ notificationRouter.post('/', async (req, res) => {
 });
 
 // Update notification by userId and goalId
-notificationRouter.patch('/:userId/:goalId', async (req, res) => {
+notificationRouter.patch('/notifications/:userId/:goalId', async (req, res) => {
     const allowedUpdates = ['notificationType', 'dateScheduled', 'message'];
     const updates = {};
 
@@ -95,6 +84,15 @@ notificationRouter.patch('/:userId/:goalId', async (req, res) => {
             { new: true, runValidators: true }
         );
 
+        const date = new Date(updatedNotification.dateScheduled);
+        const cronExpression = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1} *`;
+        
+        const job = cron.schedule(cronExpression, () => {
+            console.log(`Sending notification: ${updatedNotification.message}`);
+        }, {
+            scheduled: true
+        });
+
         if (!updatedNotification) {
             return res.status(404).json({ message: `No notification found for user ID ${req.params.userId} and goal ID ${req.params.goalId}` });
         }
@@ -105,7 +103,7 @@ notificationRouter.patch('/:userId/:goalId', async (req, res) => {
     }
 });
 
-notificationRouter.delete('/:userId/:goalId', async (req, res) => {
+notificationRouter.delete('/notifications/:userId/:goalId', async (req, res) => {
     try {
         const notification = await Notification.findOneAndDelete({
             userId: req.params.userId,
@@ -116,38 +114,18 @@ notificationRouter.delete('/:userId/:goalId', async (req, res) => {
             return res.status(404).json({ message: `No notification found for user ID ${req.params.userId} and goal ID ${req.params.goalId}` });
         }
 
-        res.status(200).json({ message: "Successfully deleted notification" });
+        res.status(200).json(notification);
     } catch (error) {
         res.status(500).json({ message: "Error deleting notification", error });
     }
 });
 
-// Schedule a notification for a specific date
-notificationRouter.post('/schedule', async (req, res) => {
-    try {
-        const notification = new Notification(req.body);
-        await notification.save();
-
-        const date = new Date(notification.dateScheduled);
-        const cronExpression = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1} *`;
-        
-        const job = cron.schedule(cronExpression, () => {
-            console.log(`Sending notification: ${notification.message}`);
-        }, {
-            scheduled: true
-        });
-        
-        res.status(201).json({ message: 'Notification scheduled', jobId: job });
-    } catch (error) {
-        res.status(400).json({ message: "Error scheduling notification", error });
-    }
-});
 
 // Bulk delete notifications by scheduled date
-notificationRouter.delete('/batch', async (req, res) => {
+notificationRouter.delete('notifications/:userId', async (req, res) => {
     try {
         const result = await Notification.deleteMany({ dateScheduled: { $lte: req.body.date } });
-        res.status(200).json({ message: `${result.deletedCount} notifications deleted` });
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ message: "Error deleting notifications", error });
     }

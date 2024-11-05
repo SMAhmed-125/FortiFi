@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getNotificationByUserIdAndGoalId } from '../../services/notificationApi';
+import { getNotificationsByUserIdAndGoalId } from '../../services/notificationApi';
 
 function NotificationList() {
     const [notifications, setNotifications] = useState([]);
@@ -7,7 +7,7 @@ function NotificationList() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const data = await getNotificationByUserIdAndGoalId();
+                const data = await getNotificationsByUserIdAndGoalId();
                 setNotifications(data);
             } catch (error) {
                 console.error("Error fetching notifications:", error);

@@ -32,9 +32,9 @@ export const getProgressOfGoalById = async (userId) => {
     }
 };
 
-export const createGoal = async (goalData) => {
+export const createGoal = async (userId, goalData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/goals`, goalData);
+        const response = await axios.post(`${API_BASE_URL}/goals/${userId}`, goalData);
         return response.data;
     } catch (error) {
         console.error(`Error creating goal:`, error);

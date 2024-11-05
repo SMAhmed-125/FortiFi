@@ -15,7 +15,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 const dbURI = process.env.DB_URI;
 
 // Middleware
@@ -29,13 +29,13 @@ app.use((err, req, res, next) => {
 });
 
 // Connect routes
-app.use('/api/budgets', budgetRoutes);
-app.use('/api/goals', goalRoutes);
-app.use('/api/milestones', milestoneRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/savings-plans', savingsPlanRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/users', userRoutes);
+app.use('/budgets', budgetRoutes);
+app.use('/goals', goalRoutes);
+app.use('/milestones', milestoneRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/savings', savingsPlanRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/users', userRoutes);
 
 // Root route
 app.get('/', (req, res) => {

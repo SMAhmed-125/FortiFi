@@ -6,6 +6,11 @@ const savingsPlanSchema = mongoose.Schema({
         required: true,
         ref: 'goal',
     },
+    userId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'user',
+    },
     frequency: {
         type: String,
         enum: ["weekly", "monthly", "biweekly", "daily", "bianually", "annually"],

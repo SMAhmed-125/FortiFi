@@ -2,17 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-export const getAllNotifications = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/notifications`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error getting notifications:`, error);
-        throw error;
-    }
-};
-
-export const getNotificationById = async (userId) => {
+export const getNotificationsByUserId = async (userId) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/notifications/${userId}`);
       return response.data;
@@ -22,7 +12,7 @@ export const getNotificationById = async (userId) => {
     }
 };
 
-export const getNotificationByUserIdAndGoalId = async (userId, goalId) => {
+export const getNotificationsByUserIdAndGoalId = async (userId, goalId) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/notifications/${userId}/${goalId}`);
       return response.data;
@@ -32,9 +22,9 @@ export const getNotificationByUserIdAndGoalId = async (userId, goalId) => {
     }
 };
 
-export const createNotification = async (notificationData) => {
+export const createNotification = async (userId, goalId, notificationData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/notifications`, notificationData);
+        const response = await axios.post(`${API_BASE_URL}/notifications/${userId}/${goalId}`, notificationData);
         return response.data;
     } catch (error) {
         console.error(`Error creating notification:`, error);
@@ -42,9 +32,9 @@ export const createNotification = async (notificationData) => {
     }
 };
 
-export const updateNotificationById = async (userId, notificationData) => {
+export const updateNotificationById = async (userId, goalId, notificationData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/notifications/${userId}`, notificationData);
+        const response = await axios.patch(`${API_BASE_URL}/notifications/${userId}/${goalId}`, notificationData);
         return response.data;
     } catch (error) {
         console.error(`Error updating notification with userId ${userId}:`, error);
@@ -52,9 +42,9 @@ export const updateNotificationById = async (userId, notificationData) => {
     }
 };
 
-export const deleteNotificationById = async (userId) => {
+export const deleteNotificationByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/notifications/${userId}`);
+        const response = await axios.delete(`${API_BASE_URL}/notifications/${userId}/${goalId}`);
         return response.data;
     } catch (error) {
         console.error(`Error deleting notification with userId ${userId}:`, error);
@@ -62,22 +52,13 @@ export const deleteNotificationById = async (userId) => {
     }
 };
 
-export const deleteNotificationBatch = async (date) => {
+export const deleteMultipleNotificationsByUserId = async (userId, notificationData) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/notifications/batch`, date);
+        const response = await axios.delete(`${API_BASE_URL}/notifications/${userId}`, notificationData);
         return response.data;
     } catch (error) {
-        console.error(`Error deleting notification on ${date}:`, error);
+        console.error(`Error deleting notification`, error);
         throw error;
     }
 };
 
-export const scheduleNotification = async (notificationData) => {
-    try {
-        const response = await axios.post(`${API_BASE_URL}/notifications/schedule`, notificationData);
-        return response.data;
-    } catch (error) {
-        console.error(`Error scheduling notification:`, error);
-        throw error;
-    }
-};

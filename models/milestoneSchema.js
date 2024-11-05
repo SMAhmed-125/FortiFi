@@ -6,6 +6,11 @@ const milestoneSchema = mongoose.Schema({
         required: true,
         ref: 'goal',
     },
+    userId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'user',
+    },
     name: {
         type: String,
         required: true,
@@ -30,4 +35,4 @@ const milestoneSchema = mongoose.Schema({
 })
 
 const milestone = mongoose.model('milestone', milestoneSchema);
-module.export = milestone;
+module.exports = milestone;

@@ -2,28 +2,8 @@ const express = require('express');
 const Budget = require('../models/budgetSchema');
 const budgetRouter = express.Router();
 
-// Get all budgets
-budgetRouter.get('/', async (req, res) => {
-    try {
-        const budgets = await Budget.find();
-        res.status(200).json(budgets);
-    } catch (error) {
-        res.status(500).json({ message: "Error retrieving budgets" });
-    }
-});
-
-// Get budgets for a specific user
-budgetRouter.get('/:userId', async (req, res) => {
-    try {
-        const budgets = await Budget.findOne({ userId: req.params.userId });
-        res.status(200).json(budgets);
-    } catch (error) {
-        res.status(500).json({ message: "Error retrieving budgets" });
-    }
-});
-
 // Get a budget summary grouped by categories
-budgetRouter.get('/:userId/summary', async (req, res) => {
+budgetRouter.get('/budgets/:userId/summary', async (req, res) => {
     try {
         const budgets = await Budget.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
@@ -57,9 +37,19 @@ budgetRouter.get('/:userId/summary', async (req, res) => {
     }
 });
 
+// Get all budgets for a specific user
+budgetRouter.get('/budgets/:userId', async (req, res) => {
+    try {
+        const budgets = await Budget.find({ userId: req.params.userId });
+        res.status(200).json(budgets);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving budgets" });
+    }
+});
 
-// Create or replace a budget
-budgetRouter.put('/:userId', async (req, res) => {
+
+// Update a budget
+budgetRouter.put('/budgets/:userId', async (req, res) => {
     try {
         const updatedBudget = await Budget.findOneAndUpdate(
             { userId: req.params.userId },
@@ -73,7 +63,7 @@ budgetRouter.put('/:userId', async (req, res) => {
 });
 
 // Update budget by fields
-budgetRouter.patch('/:userId', async (req, res) => {
+budgetRouter.patch('/budgets/:userId', async (req, res) => {
     try {
         const updatedBudget = await Budget.findOne(
             { userId: req.params.userId },
@@ -90,7 +80,7 @@ budgetRouter.patch('/:userId', async (req, res) => {
 });
 
 // Delete a budget by ID
-budgetRouter.delete('/:userId', async (req, res) => {
+budgetRouter.delete('/budgets/:userId', async (req, res) => {
     try {
         await Budget.findOneAndDelete({ userId: req.params.userId });
         res.status(204).send();

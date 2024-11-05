@@ -60,10 +60,10 @@ function App() {
                 <div style={contentStyles}>
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
-                        <Route path="/budget" element={<Budget />} />
+                        <Route path="/budgets" element={<Budget />} />
                         <Route path="/goals" element={<Goals />} />
                         <Route path="/transactions" element={<Transactions />} />
-                        <Route path="/savings-plan" element={<SavingsPlan />} />
+                        <Route path="/savings" element={<SavingsPlan />} />
                         <Route path="/notifications" element={<Notifications />} />
                     </Routes>
                 </div>
