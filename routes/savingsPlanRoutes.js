@@ -2,7 +2,7 @@ const SavingsPlan = require('../models/savingsPlanSchema.js');
 const express = require('express');
 const savingsPlanRouter = express.Router();
 
-savingsPlanRouter.get('/savings/:goalId', async (req, res) => {
+savingsPlanRouter.get('/:goalId', async (req, res) => {
     try {
         const savingsPlan = await SavingsPlan.findOne({ goalId: req.params.goalId });
 
@@ -17,7 +17,7 @@ savingsPlanRouter.get('/savings/:goalId', async (req, res) => {
 });
 
 // Track progress toward savings goal
-savingsPlanRouter.get('/savings/:goalId/progress', async (req, res) => {
+savingsPlanRouter.get('/:goalId/progress', async (req, res) => {
     try {
         const plan = await SavingsPlan.findOne({ goalId: req.params.goalId });
         if (!plan) return res.status(404).json({ message: 'Savings plan not found.' });
@@ -29,7 +29,7 @@ savingsPlanRouter.get('/savings/:goalId/progress', async (req, res) => {
     }
 });
 
-savingsPlanRouter.post('/savings/:goalId', async (req, res) => {
+savingsPlanRouter.post('/:goalId', async (req, res) => {
  const { frequency, amount, startDate, nextContributionDate } = req.body;
 
     const savingsPlan = new SavingsPlan({
@@ -48,7 +48,7 @@ savingsPlanRouter.post('/savings/:goalId', async (req, res) => {
     }
 });
 
-savingsPlanRouter.patch('/savings/:goalId', async (req, res) => {
+savingsPlanRouter.patch('/:goalId', async (req, res) => {
     try {
         const updatedSavingsPlan = await SavingsPlan.findOne(
             { goalId: req.params.goalId },
@@ -66,7 +66,7 @@ savingsPlanRouter.patch('/savings/:goalId', async (req, res) => {
     }
 });
 
-savingsPlanRouter.delete('/savings/:goalId', async (req, res) => {
+savingsPlanRouter.delete('/:goalId', async (req, res) => {
     try {
         const savingsPlan = await SavingsPlan.findOneAndDelete({ goalId: req.params.goalId });
         res.status(200).json(savingsPlan);

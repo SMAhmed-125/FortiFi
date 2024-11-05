@@ -18,6 +18,7 @@ const app = express();
 const port = process.env.PORT;
 const dbURI = process.env.DB_URI;
 
+
 // Middleware
 app.use(cors());
 app.use(express.json()); 

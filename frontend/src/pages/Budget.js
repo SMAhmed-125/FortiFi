@@ -4,11 +4,10 @@ import { getBudgetById } from '../services/budgetApi';
 
 const Budget = () => {
     const [budgetData, setBudgetData] = useState(null);
-
+    const userId = '67278ae93ac9109a110d8190';
     useEffect(() => {
         async function fetchBudget() {
             try {
-                const userId = '67278ae93ac9109a110d8190'; 
                 const response = await getBudgetById(userId);
                 setBudgetData(response.data);
             } catch (error) {

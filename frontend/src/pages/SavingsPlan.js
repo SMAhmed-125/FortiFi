@@ -5,7 +5,7 @@ import { getSavingsPlanById } from '../services/savingsPlanApi';
 
 function SavingsPlan() {
     const [savingsData, setSavingsData] = useState(null);
-    const userId = '67278ae93ac9109a110d8190'; 
+    const userId = '67278ae93ac9109a110d8190';
 
     useEffect(() => {
         async function fetchSavingsPlan() {

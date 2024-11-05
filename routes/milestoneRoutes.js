@@ -3,7 +3,7 @@ const express = require('express');
 const milestoneRouter = express.Router();
 
 // Get all milestones for user
-milestoneRouter.get('/milestones/:userId', async (req, res) => {
+milestoneRouter.get('/:userId', async (req, res) => {
     try {
         const milestones = await Milestone.find({ userId: req.params.userId});
 
@@ -18,7 +18,7 @@ milestoneRouter.get('/milestones/:userId', async (req, res) => {
 });
 
 // Get milestone by goalId for user
-milestoneRouter.get('/milestones/:userId/:goalId', async (req, res) => {
+milestoneRouter.get('/:userId/:goalId', async (req, res) => {
     try {
         const milestone = await Milestone.find(
             { userId: req.params.userId },
@@ -36,14 +36,17 @@ milestoneRouter.get('/milestones/:userId/:goalId', async (req, res) => {
 });
 
 // Create a new milestone
-milestoneRouter.post('/milestones/:userId/:goalId', async (req, res) => {
+milestoneRouter.post('/:userId/:goalId', async (req, res) => {
     const { name, description, targetAmount, deadline } = req.body;
 
     try {
         const updatedMilestone = await Milestone.findOneAndUpdate(
             { userId: req.params.userId },
             { goalId: req.params.goalId },
-            req.body,
+            name,
+            description,
+            targetAmount,
+            deadline,
             { new: true, upsert: true, runValidators: true },
         );
 
@@ -58,7 +61,7 @@ milestoneRouter.post('/milestones/:userId/:goalId', async (req, res) => {
 });
 
 // Update milestone by goalId
-milestoneRouter.patch('/milestones/:userId/:goalId', async (req, res) => {
+milestoneRouter.patch('/:userId/:goalId', async (req, res) => {
     try {
         const updatedMilestone = await Milestone.findOneAndUpdate(
             { userId: req.params.userId },
@@ -79,7 +82,7 @@ milestoneRouter.patch('/milestones/:userId/:goalId', async (req, res) => {
 
 
 // Get milestones in sequence order
-milestoneRouter.get('/milestones/:userId/:goalId/ordered', async (req, res) => {
+milestoneRouter.get('/:userId/:goalId/ordered', async (req, res) => {
     try {
         const milestones = await Milestone.find(
             { userId: req.params.userId },
@@ -92,7 +95,7 @@ milestoneRouter.get('/milestones/:userId/:goalId/ordered', async (req, res) => {
 });
 
 // Delete milestone by goalId for a user
-milestoneRouter.delete('milestones/:userId/:goalId', async (req, res) => {
+milestoneRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
         const milestone = await Milestone.findOneAndDelete(
             { userId: req.params.userId },

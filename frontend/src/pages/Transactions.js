@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import TransactionList from '../components/lists/TransactionList';
 import TransactionHistoryChart from '../components/charts/TransactionHistoryChart';
-import { getTransactionById, getTransactionByUserIdAndGoalId } from '../services/transactionApi';
+import { getTransactionById } from '../services/transactionApi';
 
 function Transactions() {
     const [transactionHistory, setTransactionHistory] = useState(null);
-    const userId = '67278ae93ac9109a110d8190'; 
-
+    const userId = '67278ae93ac9109a110d8190';
     useEffect(() => {
         async function fetchTransactions() {
             try {

@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
+
 
 export const getTransactionById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}`);
+        const response = await api.get(`/transactions/${userId}`);
         return response.data;
     } catch (error) {
         console.error(`Error getting transaction with id ${userId}:`, error);
@@ -14,7 +17,7 @@ export const getTransactionById = async (userId) => {
 
 export const getTransactionByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/${goalId}`);
+        const response = await api.get(`/transactions/${userId}/${goalId}`);
         return response.data;
     } catch (error) {
         console.error(`Error getting transaction with user id ${userId} and goal id ${goalId}:`, error);
@@ -24,7 +27,7 @@ export const getTransactionByUserIdAndGoalId = async (userId, goalId) => {
 
 export const getTransactionSummaryByUserId = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/summary`);
+        const response = await api.get(`/transactions/${userId}/summary`);
         return response.data;
     } catch (error) {
         console.error(`Error getting transaction summary:`, error);
@@ -34,7 +37,7 @@ export const getTransactionSummaryByUserId = async (userId) => {
 
 export const getTransactionSummaryByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/transactions/${userId}/${goalId}/summary`);
+        const response = await api.get(`/transactions/${userId}/${goalId}/summary`);
         return response.data;
     } catch (error) {
         console.error(`Error getting transaction summary:`, error);
@@ -42,9 +45,9 @@ export const getTransactionSummaryByUserIdAndGoalId = async (userId, goalId) => 
     }
 };
 
-export const createTransaction = async (transactionData) => {
+export const createTransaction = async (userId, goalId, transactionData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/transactions`, transactionData);
+        const response = await api.post(`/transactions/${userId}/${goalId}`, transactionData);
         return response.data;
     } catch (error) {
         console.error(`Error creating transaction:`, error);
@@ -54,7 +57,7 @@ export const createTransaction = async (transactionData) => {
 
 export const deleteTransactionByUserIdAndGoalId = async (userId, goalId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/transactions/${userId}/${goalId}`);
+        const response = await api.delete(`/transactions/${userId}/${goalId}`);
         return response.data;
     } catch (error) {
         console.error(`Error deleting transaction with user id ${userId} and goal id ${goalId}:`, error);

@@ -10,7 +10,7 @@ const Dashboard = () => {
     const [spendingData, setSpendingData] = useState(null);
     const [budgetData, setBudgetData] = useState(null);
     const [goalData, setGoalData] = useState(null);
-    const userId = '67278ae93ac9109a110d8190'; 
+    const userId = '67278ae93ac9109a110d8190';
     useEffect(() => {
         async function fetchData() {
             const spending = await getTransactionById(userId);

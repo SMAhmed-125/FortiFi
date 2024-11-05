@@ -1,20 +1,12 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-export const getAllGoals = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/goals`);
-        return response.data;
-    } catch(error) {
-        console.error('Error fetching goals:', error);
-        throw error;
-    }
-};
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
 
 export const getGoalById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/goals/${userId}`);
+        const response = await api.get(`/goals/${userId}`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching goal with id ${userId}:`, error);
@@ -24,7 +16,7 @@ export const getGoalById = async (userId) => {
 
 export const getProgressOfGoalById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/goals/${userId}/progress`);
+        const response = await api.get(`/goals/${userId}/progress`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching goal progress with id ${userId}:`, error);
@@ -34,7 +26,7 @@ export const getProgressOfGoalById = async (userId) => {
 
 export const createGoal = async (userId, goalData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/goals/${userId}`, goalData);
+        const response = await api.post(`/goals/${userId}`, goalData);
         return response.data;
     } catch (error) {
         console.error(`Error creating goal:`, error);
@@ -44,7 +36,7 @@ export const createGoal = async (userId, goalData) => {
 
 export const updateGoal = async (userId, goalData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/goals/${userId}`, goalData);
+        const response = await api.patch(`/goals/${userId}`, goalData);
         return response.data;
     } catch (error) {
         console.error(`Error updating goal with ${userId}:`, error);
@@ -54,7 +46,7 @@ export const updateGoal = async (userId, goalData) => {
 
 export const deleteGoal = async (userId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/goals/${userId}`);
+        const response = await api.delete(`/goals/${userId}`);
         return response.data;
     } catch (error) {
         console.error(`Error deleting goal with id ${userId}:`, error);

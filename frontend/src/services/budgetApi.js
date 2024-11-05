@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
 
 
 // Get all budgets by User Id
 export const getBudgetById = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/budgets/${userId}`);
+        const response = await api.get(`/budgets/${userId}`);
         return response.data;
     } catch (error) {
         console.error(`Error getting budgets:`, error);
@@ -17,7 +19,7 @@ export const getBudgetById = async (userId) => {
 // Get budget summary for a specific user
 export const getBudgetSummaryByUserId = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/budgets/${userId}/summary`);
+        const response = await api.get(`/budgets/${userId}/summary`);
         return response.data;
     } catch (error) {
         console.error(`Error getting budget summary for user ${userId}:`, error);
@@ -28,7 +30,7 @@ export const getBudgetSummaryByUserId = async (userId) => {
 // Update a specific budget by ID
 export const updateBudgetById = async (userId, budgetData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/budgets/${userId}`, budgetData);
+        const response = await api.patch(`/budgets/${userId}`, budgetData);
         return response.data;
     } catch (error) {
         console.error(`Error updating budget with id ${userId}:`, error);
@@ -39,7 +41,7 @@ export const updateBudgetById = async (userId, budgetData) => {
 // Create or replace a budget for a specific user 
 export const createBudget = async (userId, budgetData) => {
     try {
-        const response = await axios.put(`${API_BASE_URL}/budgets/${userId}`, budgetData);
+        const response = await api.put(`/budgets/${userId}`, budgetData);
         return response.data;
     } catch (error) {
         console.error(`Error creating or updating budget for user ${userId}:`, error);
@@ -50,7 +52,7 @@ export const createBudget = async (userId, budgetData) => {
 // Delete a budget by user ID
 export const deleteBudgetById = async (userId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/budgets/${userId}`);
+        const response = await api.delete(`/budgets/${userId}`);
         return response.data;
     } catch (error) {
         console.error(`Error deleting budget for user ${userId}:`, error);

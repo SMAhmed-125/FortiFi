@@ -4,7 +4,7 @@ import { getNotificationsByUserId } from '../services/notificationApi';
 
 function Notifications() {
     const [notifications, setNotifications] = useState(null);
-    const userId = '67278ae93ac9109a110d8190'; 
+    const userId = '67278ae93ac9109a110d8190';
 
     useEffect(() => {
         async function fetchNotifications() {

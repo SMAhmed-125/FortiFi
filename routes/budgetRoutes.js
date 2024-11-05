@@ -3,7 +3,7 @@ const Budget = require('../models/budgetSchema');
 const budgetRouter = express.Router();
 
 // Get a budget summary grouped by categories
-budgetRouter.get('/budgets/:userId/summary', async (req, res) => {
+budgetRouter.get('/:userId/summary', async (req, res) => {
     try {
         const budgets = await Budget.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
@@ -38,7 +38,7 @@ budgetRouter.get('/budgets/:userId/summary', async (req, res) => {
 });
 
 // Get all budgets for a specific user
-budgetRouter.get('/budgets/:userId', async (req, res) => {
+budgetRouter.get('/:userId', async (req, res) => {
     try {
         const budgets = await Budget.find({ userId: req.params.userId });
         res.status(200).json(budgets);
@@ -49,7 +49,7 @@ budgetRouter.get('/budgets/:userId', async (req, res) => {
 
 
 // Update a budget
-budgetRouter.put('/budgets/:userId', async (req, res) => {
+budgetRouter.put('/:userId', async (req, res) => {
     try {
         const updatedBudget = await Budget.findOneAndUpdate(
             { userId: req.params.userId },
@@ -63,7 +63,7 @@ budgetRouter.put('/budgets/:userId', async (req, res) => {
 });
 
 // Update budget by fields
-budgetRouter.patch('/budgets/:userId', async (req, res) => {
+budgetRouter.patch('/:userId', async (req, res) => {
     try {
         const updatedBudget = await Budget.findOne(
             { userId: req.params.userId },
@@ -80,7 +80,7 @@ budgetRouter.patch('/budgets/:userId', async (req, res) => {
 });
 
 // Delete a budget by ID
-budgetRouter.delete('/budgets/:userId', async (req, res) => {
+budgetRouter.delete('/:userId', async (req, res) => {
     try {
         await Budget.findOneAndDelete({ userId: req.params.userId });
         res.status(204).send();

@@ -5,12 +5,11 @@ import { getGoalById } from '../services/goalApi';
 
 function Goals() {
     const [goalData, setGoalData] = useState(null);
-    const userId = '67278ae93ac9109a110d8190'; 
+    const userId = '67278ae93ac9109a110d8190';
 
     useEffect(() => {
         async function fetchGoals() {
             try {
-                const userId = '67278ae93ac9109a110d8190'; 
                 const response = await getGoalById(userId);
                 setGoalData(response.data);
             } catch (error) {

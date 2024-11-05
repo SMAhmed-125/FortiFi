@@ -1,20 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-export const getAllMilestones = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/milestones`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error getting milestones:`, error);
-        throw error;
-    }
-};
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
 
 export const getMilestoneById = async (goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/milestones/${goalId}`);
+        const response = await api.get(`/milestones/${goalId}`);
         return response.data;
     } catch (error) {
         console.error(`Error getting milestone with goalId ${goalId}:`, error);
@@ -22,9 +14,9 @@ export const getMilestoneById = async (goalId) => {
     }
 };
 
-export const getMilestoneByOrder = async () => {
+export const getMilestoneByOrder = async (userId, goalId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/milestones/ordered`);
+        const response = await api.get(`/milestones${userId}/${goalId}/ordered`);
         return response.data;
     } catch (error) {
         console.error(`Error getting sorted milestones:`, error);
@@ -33,9 +25,9 @@ export const getMilestoneByOrder = async () => {
 };
 
 
-export const createMilestone = async (userId, milestoneData) => {
+export const createMilestone = async (userId, goalId, milestoneData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/milestones/${goalId}`, milestoneData);
+        const response = await api.post(`/milestones/${userId}/${goalId}`, milestoneData);
         return response.data;
     } catch (error) {
         console.error(`Error creating milestone:`, error);
@@ -43,9 +35,9 @@ export const createMilestone = async (userId, milestoneData) => {
     }
 };
 
-export const updateMilestoneById = async (goalId, milestoneData) => {
+export const updateMilestoneById = async (userId, goalId, milestoneData) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/milestones/${goalId}`, milestoneData);
+        const response = await api.patch(`/milestones/${userId}/${goalId}`, milestoneData);
         return response.data;
     } catch (error) {
         console.error(`Error updating milestone with goalId ${goalId}:`, error);
@@ -53,9 +45,9 @@ export const updateMilestoneById = async (goalId, milestoneData) => {
     }
 };
 
-export const deleteMilestoneById = async (goalId) => {
+export const deleteMilestoneById = async (userId, goalId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/milestones/${goalId}`);
+        const response = await api.delete(`/milestones/${userId}/${goalId}`);
         return response.data;
     } catch (error) {
         console.error(`Error deleting milestone with goalId ${goalId}:`, error);

@@ -3,7 +3,7 @@ const Transaction = require('../models/transactionSchema.js');
 const express = require('express');
 const transactionRouter = express.Router();
 
-transactionRouter.get('/transactions/:userId', async (req, res) => {
+transactionRouter.get('/:userId', async (req, res) => {
     try {
         const transactions = await Transaction.find({ userId: req.params.userId });
 
@@ -13,7 +13,7 @@ transactionRouter.get('/transactions/:userId', async (req, res) => {
     }
 });
 
-transactionRouter.get('/transactions/:userId/:goalId', async (req, res) => {
+transactionRouter.get('/:userId/:goalId', async (req, res) => {
     try {
         const transactions = await Transaction.find(
             { userId: req.params.userId },
@@ -26,7 +26,7 @@ transactionRouter.get('/transactions/:userId/:goalId', async (req, res) => {
     }
 });
 
-transactionRouter.get('/transactions/:userId/:goalId/summary', async (req, res) => {
+transactionRouter.get('/:userId/:goalId/summary', async (req, res) => {
     try {
         const summary = await Transaction.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(req.params.userId) }, goalId: mongoose.Types.ObjectId(req.params.goalId) },
@@ -39,7 +39,7 @@ transactionRouter.get('/transactions/:userId/:goalId/summary', async (req, res) 
     }
 });
 
-transactionRouter.get('/transactions/:userId/summary', async (req, res) => {
+transactionRouter.get('/:userId/summary', async (req, res) => {
     try {
         const summary = await Transaction.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
@@ -53,7 +53,7 @@ transactionRouter.get('/transactions/:userId/summary', async (req, res) => {
 });
 
 
-transactionRouter.post('/transactions/:userId/:goalId', async (req, res) => {
+transactionRouter.post('/:userId/:goalId', async (req, res) => {
     const { amount, currentAmount, transactionType, date, description } = req.body;
 
     const transaction = new Transaction({
@@ -74,7 +74,7 @@ transactionRouter.post('/transactions/:userId/:goalId', async (req, res) => {
     }
 });
 
-transactionRouter.delete('/transactions/:userId/:goalId', async (req, res) => {
+transactionRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
         const transaction = await Transaction.findOneAndDelete(
             { userId: req.params.userId},

@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+});
+
 
 export const getUserById = async (userId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
+      const response = await api.get(`/users/${userId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching user with userId ${userId}:`, error);
@@ -14,7 +17,7 @@ export const getUserById = async (userId) => {
 
 export const updateUser = async (userId, userData) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/users/${userId}`, userData);
+      const response = await api.patch(`/users/${userId}`, userData);
       return response.data;
     } catch (error) {
       console.error(`Error updating user with userId ${userId}:`, error);
@@ -24,7 +27,7 @@ export const updateUser = async (userId, userData) => {
 
 export const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
+      const response = await api.delete(`/users/${userId}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting user with userId ${userId}:`, error);
@@ -34,7 +37,7 @@ export const deleteUser = async (userId) => {
 
 export const registerUser = async (userData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/users/register`, userData);
+      const response = await api.post(`/users/register`, userData);
       return response.data;
     } catch (error) {
       console.error('Error registering user:', error);
@@ -44,8 +47,8 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async (userData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/users/login`, userData);
-      return response.data; // token in response
+      const response = await api.post(`/users/login`, userData);
+      return response.data; 
     } catch (error) {
       console.error('Error logging in:', error);
       throw error;
