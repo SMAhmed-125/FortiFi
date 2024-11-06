@@ -39,7 +39,7 @@ const BudgetChart = ({ data }) => {
         plugins: {
             legend: {
                 labels: {
-                    color: '#FFFFFF' // White text for legend
+                    color: '#FFFFFF' 
                 }
             }
         }

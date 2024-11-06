@@ -3,11 +3,12 @@ import { getTransactionByUserIdAndGoalId } from '../../services/transactionApi';
 
 function TransactionList() {
     const [transactions, setTransactions] = useState([]);
+    const userId = '67278ae93ac9109a110d8190';
 
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const data = await getTransactionByUserIdAndGoalId();
+                const data = await getTransactionByUserIdAndGoalId(userId);
                 setTransactions(data);
             } catch (error) {
                 console.error("Error fetching transactions:", error);
@@ -19,8 +20,7 @@ function TransactionList() {
     return (
         <div>
             <h2>Transaction List</h2>
-            {transactions.length > 0 ? (
-                transactions.map(transaction => (
+            {transactions.map(transaction => (
                     <div key={transaction._id} className="transaction-item">
                         <p><strong>Goal ID:</strong> {transaction.goalId}</p>
                         <p><strong>User ID:</strong> {transaction.userId}</p>
@@ -29,13 +29,10 @@ function TransactionList() {
                         <p><strong>Date:</strong> {new Date(transaction.date).toLocaleDateString()}</p>
                         <p><strong>Description:</strong> {transaction.description}</p>
                     </div>
-                ))
-            ) : (
-                <p>No transactions found</p>
-            )}
+                ))}
         </div>
     );
-}
+};
 
 export default TransactionList;
 

@@ -22,8 +22,6 @@ function NotificationList() {
             {notifications.length > 0 ? (
                 notifications.map(notification => (
                     <div key={notification._id} className="notification-item">
-                        <p><strong>User ID:</strong> {notification.userId}</p>
-                        <p><strong>Goal ID:</strong> {notification.goalId}</p>
                         <p><strong>Type:</strong> {notification.notificationType}</p>
                         <p><strong>Scheduled Date:</strong> {new Date(notification.dateScheduled).toLocaleDateString()}</p>
                         <p><strong>Message:</strong> {notification.message || 'No message provided'}</p>

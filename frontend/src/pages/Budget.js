@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import BudgetChart from '../components/charts/BudgetChart';
-import { getBudgetById } from '../services/budgetApi';
+import React from 'react';
 
-const Budget = () => {
-    const [budgetData, setBudgetData] = useState(null);
-    const userId = '67278ae93ac9109a110d8190';
-    useEffect(() => {
-        async function fetchBudget() {
-            try {
-                const response = await getBudgetById(userId);
-                setBudgetData(response.data);
-            } catch (error) {
-                console.error("Error fetching budget data:", error);
-            }
-        }
-
-        fetchBudget();
-    }, []);
-
-    if (!budgetData) return <div>Loading...</div>;
-
+const Budget = ({ budgets }) => {
     return (
-        <div>
-            <h2>Budget</h2>
-            <BudgetChart data={budgetData} />
+        <div className="budget-page">
+            <h2>Budget Details</h2>
+            {budgets.length > 0 ? (
+                budgets.map((budget) => (
+                    <div key={budget._id} className="budget-item">
+                        <p><strong>Monthly Income:</strong> ${budget.monthlyIncome}</p>
+                        <p><strong>Monthly Expenses:</strong> ${budget.monthlyExpenses}</p>
+                        <p><strong>Categories:</strong> {budget.budgetCategories.join(', ')}</p>
+                        <p><strong>Created At:</strong> {new Date(budget.createdAt).toLocaleDateString()}</p>
+                    </div>
+                ))
+            ) : (
+                <p>No budgets match the selected category.</p>
+            )}
         </div>
     );
 };
 
 export default Budget;
+
+
 

@@ -8,8 +8,8 @@ const ProgressChart = ({ data }) => {
             {
                 label: 'Savings Progress',
                 data: [data.achieved, data.remaining],
-                backgroundColor: ['#36A2EB', '#FF6384'],
-                hoverBackgroundColor: ['#36A2EB', '#FF6384'],
+                backgroundColor: ['#7c4aa8', '#9a1330'],
+                hoverBackgroundColor: ['#240646', '#b52343'],
             }
         ]
     };

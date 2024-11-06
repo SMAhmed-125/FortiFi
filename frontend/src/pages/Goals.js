@@ -1,34 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import GoalList from '../components/lists/GoalList';
-import GoalChart from '../components/charts/GoalChart';
-import { getGoalById } from '../services/goalApi';
+import React from 'react';
 
-function Goals() {
-    const [goalData, setGoalData] = useState(null);
-    const userId = '67278ae93ac9109a110d8190';
-
-    useEffect(() => {
-        async function fetchGoals() {
-            try {
-                const response = await getGoalById(userId);
-                setGoalData(response.data);
-            } catch (error) {
-                console.error("Error fetching goals data:", error);
-            }
-        }
-        fetchGoals();
-    }, []);
-
-    if (!goalData) return <div>Loading...</div>;
+const Goals = ({goals}) => {
 
     return (
         <div className="goals-page">
             <h2>Goals</h2>
-            <GoalList />
-            <GoalChart data={goalData} />
+            <h3>Goals Details</h3>
+            {goals.map((goal) => (
+                <div key={goal._id} className="goal-item">
+                    <p><strong>Name: </strong>${goal.name} </p>
+                    <p><strong>Target Amount: </strong> ${goal.targetAmount}</p>
+                    <p><strong>Current Amount: </strong> ${goal.currentAmount}</p>
+                    <p><strong>Start Date: </strong> ${goal.startDate}</p>
+                    <p><strong>Target Date: </strong> ${goal.targetDate}</p>
+                    <p><strong>Priority Level: </strong> ${goal.priorityLevel}</p>
+                </div>
+            ))}
+
         </div>
     );
-}
+};
 
 export default Goals;
 

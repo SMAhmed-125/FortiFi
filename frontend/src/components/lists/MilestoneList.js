@@ -22,7 +22,6 @@ function MilestoneList() {
             {milestones.length > 0 ? (
                 milestones.map(milestone => (
                     <div key={milestone._id} className="milestone-item">
-                        <p><strong>Goal ID:</strong> {milestone.goalId}</p>
                         <p><strong>Name:</strong> {milestone.name}</p>
                         <p><strong>Description:</strong> {milestone.description}</p>
                         <p><strong>Target Amount:</strong> ${milestone.targetAmount}</p>
