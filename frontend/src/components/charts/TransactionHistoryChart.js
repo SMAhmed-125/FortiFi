@@ -1,5 +1,27 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    BarController,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+} from 'chart.js';
+
+ChartJS.register(
+    BarController,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+);
 
 const TransactionHistoryChart = ({ data }) => {
     const chartData = {

@@ -1,5 +1,23 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    PieController,
+    ArcElement,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+} from 'chart.js';
+
+ChartJS.register(
+    PieController,
+    ArcElement,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+);
 
 const SpendingChart = ({ data }) => {
     const chartData = {

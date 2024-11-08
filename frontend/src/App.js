@@ -13,7 +13,7 @@ import Notifications from './pages/Notifications';
 function App() {
     const appStyles = {
         fontFamily: 'Trebuchet MS, sans-serif',
-        backgroundColor: '#2D3142', 
+        backgroundColor: '#24254A', 
         color: '#FFFFFF', 
         minHeight: '100vh',
         display: 'flex',
@@ -31,20 +31,11 @@ function App() {
     const headerFooterStyles = {
         width: '100%',
         padding: '20px',
-        backgroundColor: '#2D3142', 
+        backgroundColor: '#24254A', 
         color: '#FFFFFF',
         textAlign: 'center',
     };
 
-    const navBarStyles = {
-      display: 'flex',
-      justifyContent: 'center',
-      backgroundColor: '#4F5D75',
-      padding: '10px 0',
-      width: '100%',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      color: '#FFFFFF',
-  };
 
     return (
         <div style={appStyles}>
@@ -53,7 +44,7 @@ function App() {
                     <Header />
                 </header>
                 
-                <div style={navBarStyles}>
+                <div>
                     <NavBar />
                 </div>
                 

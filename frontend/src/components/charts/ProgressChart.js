@@ -1,5 +1,23 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import  { Doughnut } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    DoughnutController,
+    ArcElement,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+} from 'chart.js';
+
+ChartJS.register(
+    DoughnutController,
+    ArcElement,
+    Filler,
+    Legend,
+    Tooltip,
+    Title,
+);
 
 const ProgressChart = ({ data }) => {
     const chartData = {

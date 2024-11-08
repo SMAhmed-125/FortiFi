@@ -1,5 +1,28 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    LineController,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Legend,
+    Tooltip,
+    Title,
+} from 'chart.js';
+
+ChartJS.register(
+    LineController,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Legend,
+    Tooltip,
+    Title,
+);
+
 
 const GoalChart = ({ data }) => {
     const chartData = {
