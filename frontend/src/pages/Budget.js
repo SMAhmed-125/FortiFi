@@ -4,7 +4,7 @@ const Budget = ({ budgets }) => {
     return (
         <div className="budget-page">
             <h2>Budget Details</h2>
-            {budgets.map((budget) => (
+            {budgets.forEach((budget) => (
                     <div key={budget._id} className="budget-item">
                         <p><strong>Monthly Income:</strong> ${budget.monthlyIncome}</p>
                         <p><strong>Monthly Expenses:</strong> ${budget.monthlyExpenses}</p>

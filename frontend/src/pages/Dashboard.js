@@ -33,12 +33,6 @@ const Dashboard = () => {
             maxWidth: '1200px',
             margin: '0 auto',
         },
-        heading: {
-            color: '#3498db',
-            fontSize: '2em',
-            textAlign: 'center',
-            marginBottom: '30px',
-        },
         chartSection: {
             display: 'flex',
             gap: '20px',
@@ -48,16 +42,14 @@ const Dashboard = () => {
         chartContainer: {
             flex: '1 1 300px',
             padding: '20px',
-            border: '1px solid #ddd',
             borderRadius: '8px',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            backgroundColor: '#fff',
+            backgroundColor: '#2f112c',
         },
     };
 
     return (
         <div style={styles.container}>
-            <h1 style={styles.heading}>Dashboard</h1>
             <div style={styles.chartSection}>
                 <div style={styles.chartContainer}>
                     <SpendingChart data={spendingData} />

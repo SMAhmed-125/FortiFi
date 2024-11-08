@@ -34,7 +34,7 @@ const SpendingChart = ({ data }) => {
 
     const containerStyle = {
         backgroundColor: '#2D3142',
-        color: '#FFFFFF',
+        color: '#2c1f35',
         width: '100%',
         maxWidth: '400px',
         margin: '0 auto',

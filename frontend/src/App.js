@@ -12,7 +12,7 @@ import Notifications from './pages/Notifications';
 
 function App() {
     const appStyles = {
-        fontFamily: 'Trebuchet MS, sans-serif',
+        fontFamily: 'Montserrat',
         backgroundColor: '#24254A', 
         color: '#FFFFFF', 
         minHeight: '100vh',
@@ -28,19 +28,11 @@ function App() {
         flex: '1',
     };
 
-    const headerFooterStyles = {
-        width: '100%',
-        padding: '20px',
-        backgroundColor: '#24254A', 
-        color: '#FFFFFF',
-        textAlign: 'center',
-    };
-
 
     return (
         <div style={appStyles}>
             <Router>
-                <header style={headerFooterStyles}>
+                <header>
                     <Header />
                 </header>
                 
@@ -59,7 +51,7 @@ function App() {
                     </Routes>
                 </div>
                 
-                <footer style={headerFooterStyles}>
+                <footer>
                     <Footer />
                 </footer>
             </Router>
