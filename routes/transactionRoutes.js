@@ -1,12 +1,12 @@
-const { default: mongoose } = require('mongoose');
 const Transaction = require('../models/transactionSchema.js');
 const express = require('express');
+const mongoose = require('mongoose');
 const transactionRouter = express.Router();
 
 transactionRouter.get('/:userId', async (req, res) => {
+    
     try {
-        const transactions = await Transaction.find({ userId: req.params.userId });
-
+        const transactions = await Transaction.find({ userId: new mongoose.Types.ObjectId(req.params.userId.trim())});
         res.status(200).json(transactions);
     } catch (error) {
         res.status(400).json({ message: "getTransactionsById failed"});
@@ -16,8 +16,8 @@ transactionRouter.get('/:userId', async (req, res) => {
 transactionRouter.get('/:userId/:goalId', async (req, res) => {
     try {
         const transactions = await Transaction.find(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
         );
 
         res.status(200).json(transactions);
@@ -29,7 +29,7 @@ transactionRouter.get('/:userId/:goalId', async (req, res) => {
 transactionRouter.get('/:userId/:goalId/summary', async (req, res) => {
     try {
         const summary = await Transaction.aggregate([
-            { $match: { userId: mongoose.Types.ObjectId(req.params.userId) }, goalId: mongoose.Types.ObjectId(req.params.goalId) },
+            { $match: { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) }, goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
             { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } },
             { $group: { _id: "$date", totalAmount: { $sum: "$amount" }  } },
         ]);
@@ -42,7 +42,7 @@ transactionRouter.get('/:userId/:goalId/summary', async (req, res) => {
 transactionRouter.get('/:userId/summary', async (req, res) => {
     try {
         const summary = await Transaction.aggregate([
-            { $match: { userId: mongoose.Types.ObjectId(req.params.userId) } },
+            { $match: { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) } },
             { $group: { _id: "$transactionType", totalAmount: { $sum: "$amount" } } },
             { $group: { _id: "$date", totalAmount: { $sum: "$amount" }  } },
         ]);
@@ -57,8 +57,8 @@ transactionRouter.post('/:userId/:goalId', async (req, res) => {
     const { amount, currentAmount, transactionType, date, description } = req.body;
 
     const transaction = new Transaction({
-        goalId: req.params.goalId,
-        userId: req.params.userId,
+        goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()),
+        userId: new mongoose.Types.ObjectId(req.params.userId.trim()),
         amount,
         currentAmount,
         transactionType,
@@ -77,8 +77,8 @@ transactionRouter.post('/:userId/:goalId', async (req, res) => {
 transactionRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
         const transaction = await Transaction.findOneAndDelete(
-            { userId: req.params.userId},
-            { goalId: req.params.goalId}
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
         );
         res.status(200).json(transaction);
     } catch (error) {

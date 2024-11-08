@@ -3,11 +3,17 @@ const User = require('../models/userSchema.js');
 const userRouter = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 // Get user by Id
 userRouter.get('/:userId', async (req, res) => {
     try {
-        const user = await User.findOne({ userId: req.params.userId });
+        const user = await User.findById(new mongoose.Types.ObjectId(req.params.userId.trim()));
+
+        if (user.length > 1 ) {
+            return res.status(500).json({ message: "only 1 user can have a particular _id" });
+        }
+
         if (!user) {
             return res.status(404).json({ message: "cannot find user to update" });
         }
@@ -28,8 +34,8 @@ userRouter.patch('/:userId', async (req, res) => {
     });
 
     try {
-        const updatedUser = await User.findOneAndUpdate(
-            { userId: req.params.userId },
+        const updatedUser = await User.findByIdAndUpdate(
+            new mongoose.Types.ObjectId(req.params.userId.trim()),
             updates,
             { new: true, runValidators: true},
         );
@@ -47,7 +53,7 @@ userRouter.patch('/:userId', async (req, res) => {
 // Delete a user
 userRouter.delete('/:userId', async (req, res) => {
     try {
-        const user = await User.findOneAndDelete({ userId: req.params.userId });;
+        const user = await User.findByIdAndDelete(new mongoose.Types.ObjectId(req.params.userId.trim()));;
         res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ message: "error in deleting existing user" });
@@ -72,7 +78,7 @@ userRouter.post('/register', async (req, res) => {
 // Let an existing user login
 userRouter.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.find({ email: req.body.email });
         if (!user || !await bcrypt.compare(req.body.password, user.passwordHash)) {
             return res.status(401).json({ message: "InvaluserId credentials" });
         }

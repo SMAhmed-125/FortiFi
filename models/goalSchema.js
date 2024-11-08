@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
+const Transaction = require('./transactionSchema');
+const Budget = require('./budgetSchema');
+const Notification = require('./notificationSchema');
 
 
 const goalSchema = mongoose.Schema({
     userId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'user',
     },
@@ -37,6 +40,17 @@ const goalSchema = mongoose.Schema({
         required: true,
     }
 })
+
+goalSchema.pre('remove', async function(next) {
+    const userId = this._id;
+    
+    // Cascading delete for associated models
+    await Transaction.deleteMany({ userId });
+    await Notification.deleteMany({ userId });
+    await Budget.deleteMany({ userId });
+    
+    next(); 
+});
 
 const goal = mongoose.model('goal', goalSchema);
 module.exports = goal;

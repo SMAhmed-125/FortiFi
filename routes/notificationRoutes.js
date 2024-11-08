@@ -1,12 +1,13 @@
 const Notification = require('../models/notificationSchema.js');
 const express = require('express');
+const mongoose = require('mongoose');
 const notificationRouter = express.Router();
 const cron = require('node-cron');
 
 
 notificationRouter.get('/:userId', async (req, res) => {
     try {
-        const notification = await Notification.find({ userId: req.params.userId });
+        const notification = await Notification.find({ userId: new mongoose.Types.ObjectId(req.params.userId.trim()) });
 
         if(!notification) {
             return res.status(404).json({ message: `No notification with ID ${req.params.userId} exists for user` });
@@ -20,13 +21,13 @@ notificationRouter.get('/:userId', async (req, res) => {
 
 notificationRouter.get('/:userId/:goalId', async (req, res) => {
     try {
-        const notification = await Notification.find({
-            userId: req.params.userId,
-            goalId: req.params.goalId
-        });
+        const notification = await Notification.find(
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
+        );
 
         if (!notification) {
-            return res.status(404).json({ message: `No notification found for user ID ${req.params.userId} and goal ID ${req.params.goalId}` });
+            return res.status(404).json({ message: 'No notification found for specified user ID and goal ID' });
         }
 
         res.status(200).json(notification);
@@ -40,8 +41,8 @@ notificationRouter.post('/:userId/:goalId', async (req, res) => {
     const { notificationType, dateScheduled, message } = req.body;
 
     const notification = new Notification({
-        userId: req.params.userId,
-        goalId: req.params.goalId,
+        userId: new mongoose.Types.ObjectId(req.params.userId.trim()),
+        goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()),
         notificationType,
         dateScheduled,
         message,
@@ -79,7 +80,8 @@ notificationRouter.patch('/:userId/:goalId', async (req, res) => {
 
     try {
         const updatedNotification = await Notification.findOneAndUpdate(
-            { userId: req.params.userId, goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) }, 
+            { goalId: ObjectId(req.params.goalId) },
             updates,
             { new: true, runValidators: true }
         );
@@ -105,10 +107,10 @@ notificationRouter.patch('/:userId/:goalId', async (req, res) => {
 
 notificationRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
-        const notification = await Notification.findOneAndDelete({
-            userId: req.params.userId,
-            goalId: req.params.goalId
-        });
+        const notification = await Notification.findOneAndDelete(
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
+        );
 
         if (!notification) {
             return res.status(404).json({ message: `No notification found for user ID ${req.params.userId} and goal ID ${req.params.goalId}` });

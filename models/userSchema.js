@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-
+const mongoose = require('mongoose');
 const Goal = require('./goalSchema');
 const Transaction = require('./transactionSchema');
 const Budget = require('./budgetSchema');

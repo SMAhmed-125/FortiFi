@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const milestoneSchema = mongoose.Schema({
     goalId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'goal',
     },
     userId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'user',
     },

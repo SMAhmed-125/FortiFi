@@ -1,11 +1,13 @@
 const Milestone = require('../models/milestoneSchema.js');
 const express = require('express');
 const milestoneRouter = express.Router();
+const mongoose = require('mongoose');
+
 
 // Get all milestones for user
 milestoneRouter.get('/:userId', async (req, res) => {
     try {
-        const milestones = await Milestone.find({ userId: req.params.userId});
+        const milestones = await Milestone.find({ userId: new mongoose.Types.ObjectId(req.params.userId.trim()) });
 
         if (!milestone) {
             return res.status(404).json({ message: `No milestones for user ID ${req.params.userId} found` });
@@ -21,8 +23,8 @@ milestoneRouter.get('/:userId', async (req, res) => {
 milestoneRouter.get('/:userId/:goalId', async (req, res) => {
     try {
         const milestone = await Milestone.find(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
         );
 
         if (!milestone) {
@@ -41,8 +43,8 @@ milestoneRouter.post('/:userId/:goalId', async (req, res) => {
 
     try {
         const updatedMilestone = await Milestone.findOneAndUpdate(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
             name,
             description,
             targetAmount,
@@ -64,8 +66,8 @@ milestoneRouter.post('/:userId/:goalId', async (req, res) => {
 milestoneRouter.patch('/:userId/:goalId', async (req, res) => {
     try {
         const updatedMilestone = await Milestone.findOneAndUpdate(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
             req.body,
             { new: true, runValidators: true }
         );
@@ -85,8 +87,8 @@ milestoneRouter.patch('/:userId/:goalId', async (req, res) => {
 milestoneRouter.get('/:userId/:goalId/ordered', async (req, res) => {
     try {
         const milestones = await Milestone.find(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
         ).sort('sequence');
         res.status(200).json(milestones);
     } catch (error) {
@@ -98,8 +100,8 @@ milestoneRouter.get('/:userId/:goalId/ordered', async (req, res) => {
 milestoneRouter.delete('/:userId/:goalId', async (req, res) => {
     try {
         const milestone = await Milestone.findOneAndDelete(
-            { userId: req.params.userId },
-            { goalId: req.params.goalId },
+            { userId: new mongoose.Types.ObjectId(req.params.userId.trim()) },
+            { goalId: new mongoose.Types.ObjectId(req.params.goalId.trim()) },
         );
         
         if (!milestone) {
