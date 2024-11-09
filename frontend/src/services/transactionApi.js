@@ -55,14 +55,5 @@ export const createTransaction = async (userId, goalId, transactionData) => {
     }
 };
 
-export const deleteTransactionByUserIdAndGoalId = async (userId, goalId) => {
-    try {
-        const response = await api.delete(`/transactions/${userId}/${goalId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error deleting transaction with user id ${userId} and goal id ${goalId}:`, error);
-        throw error;
-    }
-};
 
 

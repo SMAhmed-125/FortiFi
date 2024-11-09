@@ -21,7 +21,18 @@ const transactionSchema = mongoose.Schema({
     },
     transactionType: {
         type: String,
-        enum: ["deposit", "withdrawal"],
+        enum: [
+            "deposit",          // Money added to the account
+            "withdrawal",       // Money taken out from the account
+            "transfer",         // Money transferred between accounts
+            "payment",          // Payments for bills, loans, etc.
+            "income",           // Earnings like salary or freelance work
+            "expense",          // General spending or purchases
+            "investment",       // Money put into investment assets
+            "loan",             // Loan received or loan payment
+            "refund",           // Money returned after a purchase
+            "fee"               // Bank or service fees
+        ],
         required: true,
     },
     date: {
