@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authenticateToken = require('./middlewares/authMiddleware'); 
 
 // Import route files
 const budgetRoutes = require('./routes/budgetRoutes');
